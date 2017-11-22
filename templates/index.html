@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ .Title }}</title>
+
+	<style>
+		html {
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<h1>Ethereum Exchange Rate</h1>
+	<br>
+
+	<h2>US Dollar</h2>
+	<h1>{{ .Eth.Price.USD }}</h1>
+	<br>
+	<h2>Bitcoin</h2>
+	<h1>{{ .Eth.Price.BTC }}</h1>
+
+</body>
+</html>

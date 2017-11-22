@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"net/http"
 )
@@ -16,21 +17,28 @@ type Ether struct {
 	Price Price `json:"ETH"`
 }
 
+type IndexPage struct {
+	Title string
+	Eth   Ether
+}
+
 func main() {
-	fmt.Println("Ethereum Exchange Rate")
+	fmt.Println("Starting...\n")
 
+	http.HandleFunc("/", indexHandler)
+	http.ListenAndServe(":8080", nil)
+}
+
+func indexHandler(rw http.ResponseWriter, req *http.Request) {
+	// get Ethereum exchange rate
 	resp, _ := http.Get("https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD")
-
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	eth := Ether{}
-	err := json.Unmarshal(body, &eth)
+	json.Unmarshal(body, &eth)
 
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	p := &IndexPage{Title: "Ethereum Price", Eth: eth}
 
-	fmt.Printf("USD: %.2f\n", eth.Price.USD)
-	fmt.Printf("BTC: %.5f\n", eth.Price.BTC)
+	t, _ := template.ParseFiles("templates/index.html")
+	t.Execute(rw, p)
 }
