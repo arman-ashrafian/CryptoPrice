@@ -8,15 +8,20 @@ import (
 	"net/http"
 )
 
+// Price ...
+// stores the price of ETH compared to BTC & USD
 type Price struct {
 	BTC float64 `json:"BTC"`
 	USD float64 `json:"USD"`
 }
 
+// Ether ...
+// Price: stores the price of ETH compared to BTC & USD
 type Ether struct {
 	Price Price `json:"ETH"`
 }
 
+// IndexPage ...
 type IndexPage struct {
 	Title string
 	Eth   Ether
