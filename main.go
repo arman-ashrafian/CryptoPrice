@@ -28,9 +28,10 @@ type indexPage struct {
 
 func main() {
 	PORT := ":8080"
-	fmt.Printf("Starting server ... localhost%s", PORT)
+	fmt.Printf("Starting server ... localhost%s\n\n", PORT)
 
 	http.HandleFunc("/", indexHandler)
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static")))) // serve static files
 	http.ListenAndServe(":8080", nil)
 }
 
