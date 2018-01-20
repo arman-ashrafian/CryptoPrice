@@ -8,27 +8,27 @@ import (
 	"net/http"
 )
 
-// Price ...
-// stores the price of ETH compared to BTC & USD
-type Price struct {
+const (
+	ethExRate = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD"
+)
+
+type price struct {
 	BTC float64 `json:"BTC"`
 	USD float64 `json:"USD"`
 }
 
-// Ether ...
-// Price: stores the price of ETH compared to BTC & USD
-type Ether struct {
-	Price Price `json:"ETH"`
+type ether struct {
+	Price price `json:"ETH"`
 }
 
-// IndexPage ...
-type IndexPage struct {
+type indexPage struct {
 	Title string
-	Eth   Ether
+	ETH   ether
 }
 
 func main() {
-	fmt.Println("Starting...\n")
+	PORT := ":8080"
+	fmt.Printf("Starting server ... localhost%s", PORT)
 
 	http.HandleFunc("/", indexHandler)
 	http.ListenAndServe(":8080", nil)
@@ -36,13 +36,13 @@ func main() {
 
 func indexHandler(rw http.ResponseWriter, req *http.Request) {
 	// get Ethereum exchange rate
-	resp, _ := http.Get("https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD")
+	resp, _ := http.Get(ethExRate)
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	eth := Ether{}
+	eth := ether{}
 	json.Unmarshal(body, &eth)
 
-	p := &IndexPage{Title: "Ethereum Price", Eth: eth}
+	p := &indexPage{Title: "Ethereum Price", ETH: eth}
 
 	t, _ := template.ParseFiles("templates/index.html")
 	t.Execute(rw, p)
