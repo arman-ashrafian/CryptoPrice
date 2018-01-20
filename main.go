@@ -9,7 +9,9 @@ import (
 )
 
 const (
-	ethExRate = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD"
+	ethExRate    = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=BTC,USD"
+	ethAddress   = "0xaddfc1233fe9909e159715ac179a6ba4a470a451"
+	ethplorerAPI = "freekey"
 )
 
 type price struct {
